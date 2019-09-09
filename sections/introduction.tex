@@ -1,102 +1,14 @@
-<<<<<<< HEAD
-
-\section{Introduction} \label{sec:introduction}
-
-Mutual information is a natural indicator of the quality of a learned representation
-\citep{hjelm2018learning}, along with other characteristics, such as the compositionality of
-latent factors, that are expected to be useful in downstream tasks, like transfer 
-learning \citep{DBLP:journals/corr/BengioTPPB17}.
-Mutual information is, however, computationally difficult to estimate for continuous
-high-dimensional random variables.  As such, it can be hard to optimize when learning
-latent variable models \citep{Hjelm2018,Chen2016}.
-
-% Many existing models are trained using approximate maximum likelihood,
-% the canonical example being the variational auto-encoder, or VAE \citep{Kingma2013,Rezende2014}.
-% The VAE comprises a probabilistic decoder and an approximate encoder, learned via
-% optimization of an evidence-based lower bound (ELBO) on the log marginal data distribution.
-% While often producing excellent representations, it is also well-known that the VAE
-% sometimes produces pathological results in which the encoder, or approximate
-% posterior, conveys relatively little useful information about the latent state.
-% This behavior, often referred to as {\em posterior collapse}, results in low
-% mutual information between observations and inferred latent states \citep{DBLP:journals/corr/BowmanVVDJB15,ChenKSDDSSA16,
-% DBLP:journals/corr/abs-1901-03416,DBLP:journals/corr/OordKK16,
-% DBLP:journals/corr/abs-1711-00937}.
-
-This paper formulates a new class of probabilistic auto-encoder model
-that is motivated by two key design principles, namely, the maximization
-of mutual information, and the symmetry of the encoder-decoder components.
-Symmetry captures our desire for both the encoder and decoder to effectively
-and consistently model the underlying observation and latent domains.
-This is particularly useful for downstream tasks in which either one
-or both of the encoder and decoder play a central role.
-These properties are formulated in terms of the symmetric Jensen-Shannon
-Divergence between the encoder and decoder, combined with an objective term
-to maximize mutual information.  We refer to the resulting model as the
-{\em mutual information machine}, or MIM.
-
-We contrast MIM with models trained using (approximate) maximum likelihood, 
-the canonical example being the variational auto-encoder, or VAE 
-\citep{Kingma2013,Rezende2014}. The VAE comprises a probabilistic decoder 
-and an approximate encoder, learned via optimization of an evidence-based 
-lower bound (ELBO) on the log marginal data distribution.  In contrast to
-MIM it is asymmetric in its formulation, and while often producing excellent 
-representations, VAEs sometimes produce pathological results in which the 
-encoder, or approximate posterior, conveys relatively little information about
-the latent state. This behavior, often referred to as {\em posterior collapse}, 
-results in low mutual information between observations and inferred latent 
-states \citep{DBLP:journals/corr/BowmanVVDJB15,ChenKSDDSSA16,
-DBLP:journals/corr/abs-1901-03416,DBLP:journals/corr/OordKK16,
-DBLP:journals/corr/abs-1711-00937}.
-
-In what follows we formulate the MIM model and propose a learning
-algorithm that minimizes an upper bound on the desired loss.
-We show that the resulting objective can be viewed as a symmetrized
-form of KL divergence, thereby closely related to the asymmetric KL
-objective of the VAE.
-In addition to the theoretical development we include several
-experiments that reveal properties of MIM through ablation studies,
-demonstrating the effectiveness of component terms in the objective.
-\micha{review me}
-This also enables direct comparisons to the VAE in terms of posterior
-collapse, mutual information, data log likelihood, and clustering.
-We demonstrate that MIM offers favourable mutual information, similar reconstruction, and better clustering in the latent representation, on the expense of sampling quality, when compared to VAE
-with the same architecture. We than demonstrate that given powerful enough model MIM can match the sampling quality of VAE.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%% very old %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Our goal is to formulate a probabilistic encoder-decoder that provides significantly higher
-% mutual information than the VAE, and does not suffer from posterior collapse.
-% We start by showing in Sec. \ref{sec:posterior-collapse} how maximizing the evidence-lower-bound (ELBO) on maximum likelihood over the
-% data marginal $\pjoint(\x)$ can be re-expressed as a form of regularized maximum likelihood over
-% a joint density $p(\x,\z)$ with a regularizer that tends to decrease mutual information
-% between observations $\x$ and latent states $\z$.
-
-
-% Finally, the formulation below exhibits an interesting connection between
-% the use of  mutual information (MI) and ML in representation learning.
-% The use of MI is prevalent in learning latent representations
-% \cite{Hjelm2018,Chen2016,Dupont2018,Klys2018}, as it provides a measure of
-% the dependence between random variables. Unfortunately, MI is hard to compute;
-% it is typically approximated or estimated with non-parametric approaches.
-% A detailed analysis is presented in \cite{Hjelm2018},
-% which offers scalability with data dimensionality and sample size.
-% While it is intuitive and easy to justify the use of MI to enforce a relationship
-% between random variables  (\eg, dependency \cite{Chen2016} or independence \cite{Klys2018}),
-% MI is often used as a regularizer to extend an existing model.
-% The \TZK formulation offers another perspective, showing how MI arises naturally
-% with the ML objective, following the assumption that a target distribution can be
-% factored into (equally plausible) encoder and decoder models.  We exploit a lower bound
-% that allows indirect optimization of MI, without estimating MI directly.
-=======
 \section{Introduction}
 \label{sec:introduction}
 
-The variational auto-encoder (VAE) is a successful class of hierarchical Bayesian models based on transforming data from a simple latent prior into a complicated observation distribution using a neural network.
+The variational auto-encoder (VAE) [] is a successful class of hierarchical Bayesian models based on transforming data from a simple latent prior into a complicated observation distribution using a neural network.
 
 \begin{align*}
     P(\x) &= \int_\x \Pdec \dz
 \end{align*}
 
-This likelihood is in general intractable to compute, there VAEs maximize the so-called evidence lower bound (ELBO)
+The log-likelihood is in general intractable to compute, so VAEs maximize the so-called evidence lower bound (ELBO).
+
 
 % Mutual information is a natural indicator of the quality of a learned representation
 % \cite{hjelm2018learning}, along with other characteristics, such as the compositionality of
@@ -157,4 +69,3 @@ This likelihood is in general intractable to compute, there VAEs maximize the so
 % collapse, mutual information, data log likelihood, and clustering.
 % We demonstrate that MIM offers favourable mutual information, similar reconstruction, and better clustering in the latent representation, on the expense of sampling quality, when compared to VAE
 % with the same architecture. We than demonstrate that given powerful enough model MIM can match the sampling quality of VAE.
->>>>>>> overleaf-2019-09-09-1959
