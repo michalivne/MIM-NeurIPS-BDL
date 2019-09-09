@@ -1,0 +1,134 @@
+% \usepackage[
+%         hidelinks,
+%         colorlinks=false,
+%         pdftex,
+%         pdfpagelabels,
+%         bookmarks,
+%         hyperindex,
+%         hyperfigures,
+%         linktoc=all,
+%         bookmarksnumbered=true,
+%         bookmarksopen=true
+%     ]{hyperref}
+\hypersetup{}
+
+
+% Recommended, but optional, packages for figures and better typesetting:
+\usepackage{microtype}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{booktabs} % for professional tables
+\usepackage{tabularx}
+
+
+
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+
+\usepackage[utf8]{inputenc}
+
+
+\usepackage[pdftex]{graphicx}
+% declare the path(s) where your graphic files are
+\graphicspath{{images/}}
+% and their extensions so you won't have to specify these with
+% every instance of \includegraphics
+\DeclareGraphicsExtensions{.pdf,.jpeg,.png}
+
+
+\usepackage{algorithm}
+\usepackage{algorithmic}
+
+
+\usepackage{url}
+
+
+% \usepackage{geometry}
+
+% % \usepackage{color}
+% \usepackage[dvipsnames,table]{xcolor}
+
+\usepackage{wrapfig}
+
+
+
+% % correct bad hyphenation here
+\hyphenation{}
+
+\usepackage{natbib}
+
+% diagrams
+\usepackage{tikz}
+\usetikzlibrary{bayesnet}
+
+% plots
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.15}
+
+% environment to fit diagrams
+\usepackage{environ}
+\makeatletter
+\newsavebox{\measure@tikzpicture}
+\NewEnviron{scaletikzpicturetowidth}[1]{%
+  \def\tikz@width{#1}%
+  \def\tikzscale{1}\begin{lrbox}{\measure@tikzpicture}%
+  \BODY
+  \end{lrbox}%
+  \pgfmathparse{#1/\wd\measure@tikzpicture}%
+  \edef\tikzscale{\pgfmathresult}%
+  \BODY
+}
+\makeatother
+
+% support referencing external document
+\usepackage{xr}
+
+\makeatletter
+\newcommand*{\addFileDependency}[1]{% argument=file name and extension
+  \typeout{(#1)}
+  \@addtofilelist{#1}
+  \IfFileExists{#1}{}{\typeout{No file #1.}}
+}
+\makeatother
+
+\newcommand*{\myexternaldocument}[1]{%
+    \externaldocument{#1}%
+    \addFileDependency{#1.tex}%
+    \addFileDependency{#1.aux}%
+}
+
+% carry counters between external documents
+\newcounter{docpart}
+\def\savestatus{%
+  \newwrite\tempfile%
+  \immediate\openout\tempfile=docstatus\arabic{docpart}.dat%
+  \immediate\write\tempfile{\thesection}%
+  \immediate\write\tempfile{\theequation}%
+  \immediate\closeout\tempfile%
+}
+\newcounter{olddocpart}
+\def\recallstatus{%
+  \setcounter{olddocpart}{\arabic{docpart}}
+  \addtocounter{olddocpart}{-1}
+  \newread\rtempfile%
+  \openin\rtempfile=docstatus\arabic{olddocpart}.dat%
+  \read\rtempfile to \tmp%
+  \setcounter{section}{\tmp}
+  \read\rtempfile to \tmp%
+  \setcounter{equation}{\tmp}%
+  \closein\rtempfile%
+}
+
+% Attempt to make hyperref and algorithmic work together better:
+% \newcommand{\theHalgorithm}{\arabic{algorithm}}
+
+\usepackage{wrapfig}
+
+\usepackage{multirow}
+% add notations
+
+\input{preamble-notations}
+

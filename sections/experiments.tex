@@ -1,0 +1,146 @@
+\section{Experiments} \label{sec:experiments}
+
+In what follows we empirically probe properties of the MIM model,
+with the VAE as a baseline.  We consider both low-dimensional synthetic 
+datasets and well-known images datasets, including MNIST \cite{LeCun1998}, 
+Fashion MNIST \cite{DBLP:journals/corr/abs-1708-07747} and Omniglot \cite{Lake2015}. 
+The code used to generate the results reported below is available 
+from \href{https://github.com/seraphlabs-ca/MIM}{https://github.com/seraphlabs-ca/MIM}.
+In all experiments (unless otherwise specified) we use Adam optimizer \cite{2014arXiv1412.6980K} with $lr = 1e-3$, and
+mini-batch of size 128. We stopped training for all experiments when validation loss
+has not improved for 10 epochs.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{2D Mixture Model Data} 
+\label{sec:posterior-collapse-mim-vae}
+
+
+We begin with a synthetic dataset of 2D observations $\x \in \mathbb{R}^2$
+and a 2D latent space, $\z \in \mathbb{R}^2$. In two dimensions we can easily 
+visualize the model and measure quantitative properties of interest (\eg, mutual information).
+Data are drawn from a Gaussian mixture model with five isotropic components
+with standard deviation 0.25; the black contours in Fig.\ \ref{fig:posterior-collapse-qualitative} (top) depict level sets of constant density $\pjoint(\x)$. 
+The latent anchor (bottom), $\pjoint(\z)$, is an isotropic standard normal distribution.
+The encoder and decoder conditional distributions are Gaussian, the means
+and variances of which are regressed from the input using two fully 
+connected layers and swish activation \cite{Ramachandran2017}).
+Finally, the parameterized data prior, $\Menc(\x)$, is defined to be the 
+marginal of the decoding distribution \eqref{eqn:q-marginal}, so
+the only model parameters are those of the encoder and decoder.
+As such we can learn models with MIM and VAE objective that share
+the same architectures and parameterizations.
+
+Figure \ref{fig:posterior-collapse-qualitative} depicts three models 
+for the VAE (even columns) and MIM (odd columns), with increasing numbers 
+of hidden units (moving left to right) to control model expressiveness.
+The top row (for VAE and MIM respectively) depict observation 
+space where black contours are levels sets of constant density 
+$\pjoint (\x)$, and red points are reconstructed samples, 
+i.e., one point drawn from the decoder $\Mdec(\x | \z' )$ where $\z'$ is 
+drawn from the encoder $ \Menc(\z' | \x') $, given observation $\x'$ 
+from $\pjoint(\x)$ in the test set.
+With each case we also report the mutual information and the root-mean-squared,
+with MIM showing a superior performance.
+
+
+\begin{figure}[t]
+    \centering
+    \setlength{\tabcolsep}{0pt}
+    \begin{tabular}{*6{>{\centering\arraybackslash}m{0.167\textwidth}}}
+      {\scriptsize VAE} & {\scriptsize MIM} & {\scriptsize VAE} & {\scriptsize MIM} & {\scriptsize VAE} & {\scriptsize MIM} \\
+      \includegraphics[width=0.165\columnwidth]{images/vae-as-mim-toy-2d/toy4/plots/vae_logvar10_mid-dim5_layers2_q-x0marginal_q-zx0_p-z0anchor_p-xz0/reconstruction_best.png}
+    & \includegraphics[width=0.165\columnwidth]{images/vae-as-mim-toy-2d/toy4/plots/mim-samp_logvar10_mid-dim5_layers2_q-x0marginal_q-zx0_p-z0anchor_p-xz0/reconstruction_best.png}
+    & \includegraphics[width=0.165\columnwidth]{images/vae-as-mim-toy-2d/toy4/plots/vae_logvar10_mid-dim20_layers2_q-x0marginal_q-zx0_p-z0anchor_p-xz0/reconstruction_best.png}
+    & \includegraphics[width=0.165\columnwidth]{images/vae-as-mim-toy-2d/toy4/plots/mim-samp_logvar10_mid-dim20_layers2_q-x0marginal_q-zx0_p-z0anchor_p-xz0/reconstruction_best.png}
+    & \includegraphics[width=0.165\columnwidth]{images/vae-as-mim-toy-2d/toy4/plots/vae_logvar10_mid-dim500_layers2_q-x0marginal_q-zx0_p-z0anchor_p-xz0/reconstruction_best.png}
+    & \includegraphics[width=0.165\columnwidth]{images/vae-as-mim-toy-2d/toy4/plots/mim-samp_logvar10_mid-dim500_layers2_q-x0marginal_q-zx0_p-z0anchor_p-xz0/reconstruction_best.png}
+    \\
+    \multicolumn{2}{c}{(a) $h \in \mathbb{R}^{5}$ } & \multicolumn{2}{c}{(b) $h \in \mathbb{R}^{20}$ } & \multicolumn{2}{c}{(c) $h \in \mathbb{R}^{500}$ } \\
+    \end{tabular}
+    \caption{
+    VAE and MIM models with 2D inputs, a 2D latent space, and 5, 20 and 500 hidden units. 
+    Top row: Black contours depict level sets of $\pjoint(\x)$, red points are 
+    reconstructed test points.
+    Bottom row: Green contours are one standard deviation ellipses of 
+    $\Menc(\z|\x)$ for test points. Dashed black circles depict one standard 
+    deviation of $\pjoint (\z)$.
+    (a) For weak architectures MIM and VAE exhibit high posterior variance.
+    (b,c) For more expressive architectures the VAE predictive variance remains high,
+    an indication of posterior collapse.
+    MIM generally produces lower predictive variance and lower reconstruction 
+    errors, consistent with high mutual information (see inset quantities).
+    }\label{fig:posterior-collapse-qualitative}
+\end{figure}
+
+\begin{figure}[ht]
+    \centering
+    \setlength{\tabcolsep}{0pt}
+    \begin{tabular}{*4{>{\centering\arraybackslash}m{0.25\textwidth}}}
+      \includegraphics[width=0.24\columnwidth]{{images/vae-as-mim-toy-2d/toy4/stats/fig.MI_ksg}.png}
+    & \includegraphics[width=0.24\columnwidth]{{images/vae-as-mim-toy-2d/toy4/stats/fig.H_q_x.symlog}.png}
+    & \includegraphics[width=0.24\columnwidth]{{images/vae-as-mim-toy-2d/toy4/stats/fig.x_recon_err.symlog}.png}
+    & \includegraphics[width=0.24\columnwidth]{{images/vae-as-mim-toy-2d/toy4/stats/fig.clf_acc_KNN5}.png}
+    \\
+    (a) MI & (b)  $\E{\x \sim \pjoint(\x)}{\log \Menc(\x)}$ & (c) Recon.\ Error & (d) Classif.\ (5-NN)
+    \end{tabular}
+    \caption{Test performance for MIM (blue) and VAE (red) for 2D GMM experiment,
+    all as functions of the number of hidden units (on x-axis), based on 10 learned
+    models in each case. From left to right, plots show mutual information, log marginal 
+    probability of test points, reconstruction error, and k-NN classification performance.
+    \david{for these plots: link dots with lines, and on x-axis perhaps only label 20, 100, 
+    200, 300, 400, and 500. Simpler format. Stdev bars or min-max?}\micha{will do. stdev in all plots}
+    }\label{fig:posterior-collapse-quantitative}
+\end{figure}
+
+
+Bottom row of Fig.\ \ref{fig:posterior-collapse-qualitative}
+depict the latent space behavior.  The dashed black circle 
+depicts one standard deviation of $\pjoint(\z)$. Each green 
+curve depicts a one standard deviation ellipse of the encoder posterior  
+$\Menc(\z' | \x')$ for a data point $\x'$ drawn from $\pjoint(\x)$.
+One can clearly see that for the weakest architecture, with only 5 
+hidden units, both MIM and VAE posteriors have large variances.
+When the number of hidden units increases to 20, however, it is 
+clear that will the VAE posterior variance remains very large in
+one dimension, the MIM encoder produces much tighter posteriors 
+densities.  Even with more a expressive architecture, VAE posteriors depict
+continue to exhibit very high variances, a common sign of posterior collapse. 
+
+
+
+To quantify this behavior for each architecture in  
+Fig.\ \ref{fig:posterior-collapse-qualitative}, Fig.\ 
+\ref{fig:posterior-collapse-quantitative} plots the mutual information, 
+the average log marginal of test points under the model $\Menc$,
+the reconstruction error of test points, and 5-NN classification
+(predicting which of five GMM components the test points were drawn from).
+Following  \cite{Hjelm2018}, we estimate mutual information 
+using the KSG mutual information estimator \cite{PhysRevE.69.066138,DBLP:journals/corr/GaoOV16},  
+based on a K-NN neighborhoods with $k=5$, and measure the quality of the representation with classification axuliary task.
+
+One can see that mutual information and the average log likelihood 
+of the test data under the MIM model are higher than for VAE models.
+One can also see that mutual information saturates for MIM as the
+number of hidden units grow larger than 20.
+(We direct the reader to Sec.\ \ref{sec:entropy-as-mi-regularizer}
+of the supplementary material for experiments on variants of 
+MIM and VAE tease apart the impact of specific terms of the 
+respective objectives.)
+
+One can also see from Fig.\ \ref{fig:posterior-collapse-qualitative} that as the models 
+becomes sufficiently expressive, in terms of the number of 
+hidden units, the MIM encoding variance becomes extremely small,
+and the reconstruction error in Fig.\ \ref{fig:posterior-collapse-quantitative} approaches 0.
+Effectively, the encoder and decoder learn an (approximately) invertible mapping using 
+an unconstrained architecture (demonstrated here for the 2D case), when the 
+dimensionality of the latent representation and the observations is the same.
+
+The VAE, by comparison, is prone to posterior collapse, with latent embeddings 
+with relatively low mutual information. In regard, we note that several 
+papers have described ways to mitigate posterior collapse in VAE learning, e.g., 
+by lower bounding, or annealing the KL divergence term in the VAE objective 
+(e.g., \citep{DBLP:journals/corr/abs-1711-00464,DBLP:journals/corr/abs-1901-03416}), 
+or by limiting the expressiveness of the decoder (e.g., \citep{ChenKSDDSSA16}).
+We posit that MIM does not suffer from this problem as a consequence of 
+the objective design principles that encourage high mutual information
+between observations and the latent representation.

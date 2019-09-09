@@ -1,0 +1,38 @@
+
+\section{Related Work}
+\label{sec:related-work}
+
+The VAE \cite{Kingma2013} is a latent variable model (LVM) that is widely used in learning a useful latent representation.
+Typically, the quality of the learned representation is measured by auxiliary tasks such as classification \cite{DBLP:journals/corr/BengioTPPB17}.
+The VAE also provides a remarkable sampling capability (\eg, \cite{DBLP:journals/corr/abs-1901-03416}) which is considered as an evidence for 
+the quality of the learned representation. Unfortunately, it has been observed that a powerful decoder
+can suffer from posterior collapse \citep{DBLP:journals/corr/BowmanVVDJB15,ChenKSDDSSA16,
+DBLP:journals/corr/abs-1901-03416,DBLP:journals/corr/OordKK16,
+DBLP:journals/corr/abs-1711-00937}. where such a decoder ignores the encoder in some dimensions, 
+and the learned representation has low mutual information with the observations.
+While several methods has been proposed to mitigate the problem \cite{DBLP:journals/corr/abs-1711-00464, DBLP:journals/corr/abs-1901-03416}, no root cause has been suggested to date.
+
+In addition, mutual information has been used to measure the quality of the representation \cite{Hjelm2018,hjelm2018learning}. Mutual information, together with disentanglement, are considered as corner stones 
+of a useful representation. Normalizing flows \cite{Rezende2015,Dinh2014,Dinh2016a,Kingma2018,DBLP:journals/corr/abs-1902-00275} directly maximizes mutual information
+by restricting the architecture to be invertible and tractable. This, however, requires the latent dimension to be the same as the dimension of the observations (\ie, no bottleneck).
+As a result no information is lost, and thus normalizing flows cannot be used in order to learn a concise representation of high dimensional data (\eg, images). Here, MIM can be viewed as a generalization of invertibility, which supports change of dimensionality, and behaves as an invertible model when dimensionality is the same.
+
+A closer formulation to \MIM is proposed in \cite{DBLP:journals/corr/BornscheinSFB15}, which shares several of the design
+principles with our work, including symmetry (\ie, consistency of encoding and decoding distributions). 
+One importance difference however, is that the formulation proposed in \cite{DBLP:journals/corr/BornscheinSFB15} advocates for a joint density
+in terms of the geometric mean between the encoder and decoder, for which they have to 
+compute the partition function.  As a result the model learning is computationally very expensive.
+
+Alternatively,  GANs \cite{NIPS2014_5423}, which for the most part focus on decoder properties without a proper inference model,
+has been shown to minimize JSD between the observations anchor $\pjoint(\x)$ and the model generative process $\Menc(\x)$ (\ie, the marginal of the decoding distribution in \MIM terms). 
+In particular, \citep{DonahueKD16-BiGAN,Bang-BiGAN2018} recognizes the importance of symmetry in learning generative models with reference to symmetric discriminators on $x$ and $z$. In contrast, here we target JSD between the joint encoding and decoding distributions, together with a regularizer to encourage high mutual information within a consistent model.
+
+
+\section{Discussion and Conclusions} \label{sec:conclusion}
+
+
+We introduce a new representation learning framework, named the {\em mutual information machine} (MIM), that defines a generative model which directly targets high mutual information (\ie, between the observations and the latent representation), and symmetry (\ie, consistency of encoding and decoding factorizations of the joint distribution). We derive a variational upper bound that enables the maximizion of mutual information in the learned representation for high dimensional continuous data, without the need to directly compute it. We then provide a possible explanation for the phenomena of posterior collapse, demonstrate  its validity, and show that MIM does not suffer from it. We also provide a comparison to VAE, and demonstrate that MIM learning leads to higher mutual information, and better clustering in the latent representation, for the same parametrization of the model. 
+
+In addition, we show that MIM behaves similar to a deterministic autoencoder when the dimensionality of the latent representation is equal to that of the observations, which effectively provides invertibility via deterministic encoder-decoder. Such behaviour allows for training of invertible functions without any constraint on the architecture. Furthermore, it allows to generalize invertibility when the dimensionality differs with a probabilistic invertibility that is defined through consistency and high mutual information.
+
+Two open questions that were not addressed in this paper: how to utilize a high capacity generative model with clustered latent representation? What is the significance of symmetry (multiple factorizations of the same distribution)? We leave that discussion for future work, where we will introduce the concept of "knowledge" - binary partition of the latent representation around areas of interest in the latent representation.
