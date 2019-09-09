@@ -27,6 +27,7 @@ Alternatively,  GANs \cite{NIPS2014_5423}, which for the most part focus on deco
 has been shown to minimize JSD between the observations anchor $\pjoint(\x)$ and the model generative process $\Menc(\x)$ (\ie, the marginal of the decoding distribution in \MIM terms). 
 In particular, \citep{DonahueKD16-BiGAN,Bang-BiGAN2018} recognizes the importance of symmetry in learning generative models with reference to symmetric discriminators on $x$ and $z$. In contrast, here we target JSD between the joint encoding and decoding distributions, together with a regularizer to encourage high mutual information within a consistent model.
 
+<<<<<<< HEAD
 % Related by different techniques:
 % \begin{itemize}
 %     \item GANs, for the most part focus on decoder properties without a proper inference model.
@@ -71,6 +72,8 @@ In particular, \citep{DonahueKD16-BiGAN,Bang-BiGAN2018} recognizes the importanc
 % equal the anchors, then $\CEloss(\params) = \mathrm{JSD}(\params) + \mathrm{R}_\mathrm{H}(\params)$ 
 % and $\MIMloss(\params) = \mathrm{SKL}(\params) + \mathrm{R}_\mathrm{H}(\params)$.
 
+=======
+>>>>>>> overleaf-2019-09-09-1959
 
 \section{Discussion and Conclusions} \label{sec:conclusion}
 
@@ -80,6 +83,7 @@ We introduce a new representation learning framework, named the {\em mutual info
 In addition, we show that MIM behaves similar to a deterministic autoencoder when the dimensionality of the latent representation is equal to that of the observations, which effectively provides invertibility via deterministic encoder-decoder. Such behaviour allows for training of invertible functions without any constraint on the architecture. Furthermore, it allows to generalize invertibility when the dimensionality differs with a probabilistic invertibility that is defined through consistency and high mutual information.
 
 Two open questions that were not addressed in this paper: how to utilize a high capacity generative model with clustered latent representation? What is the significance of symmetry (multiple factorizations of the same distribution)? We leave that discussion for future work, where we will introduce the concept of "knowledge" - binary partition of the latent representation around areas of interest in the latent representation.
+<<<<<<< HEAD
 
 % Properties of the approach worth noting:
 % \begin{itemize}
@@ -95,3 +99,5 @@ Two open questions that were not addressed in this paper: how to utilize a high 
 %     \item Two open questions that were not addressed in this paper: how to utilize a high capacity generative model with clustered latent representation? What is the significance of symmetry (multiple factorizations of the same distribution)? We leave that discussion for future work, where we will introduce the concept of "knowledge" - multiple binary partitions of the latent representation around areas of interest in $\z$.
 %     \item Compared to a flow, MIM provides invertibility via deterministic encoder-decoder, but generalizes it by supporting dimensionality reduction.
 % \end{itemize}
+=======
+>>>>>>> overleaf-2019-09-09-1959

@@ -1,80 +1,71 @@
-%%%%%%%%%%%%%%%%%%%%%%
-% NeuRIPS formatting
-%%%%%%%%%%%%%%%%%%%%%%
-\PassOptionsToPackage{numbers}{natbib}
-%%%%%%%%%%%%%%%%%%%%%%
 \documentclass{article}
 
-%%%%%%%%%%%%%%%%%%%%%%
-% ICLR formatting
-%%%%%%%%%%%%%%%%%%%%%%
-% \usepackage{iclr2020_conference,times}
-%
-% Optional math commands from https://github.com/goodfeli/dlbook_notation.
-% \input{math_commands.tex}
-%%%%%%%%%%%%%%%%%%%%%%
-
-%%%%%%%%%%%%%%%%%%%%%%
-% NeuRIPS formatting
-%%%%%%%%%%%%%%%%%%%%%%
 % if you need to pass options to natbib, use, e.g.:
-\PassOptionsToPackage{numbers, compress}{natbib}
+%     \PassOptionsToPackage{numbers, compress}{natbib}
 % before loading neurips_2019
 
+% \PassOptionsToPackage{numbers, compress}{natbib}
 
-% to compile a preprint version, e.g., for submission to arXiv, add the [preprint] option:
+% ready for submission
+% \usepackage{neurips_2019}
+
+% to compile a preprint version, e.g., for submission to arXiv, add add the
+% [preprint] option:
 \usepackage[preprint]{neurips_2019}
 
 % to compile a camera-ready version, add the [final] option, e.g.:
-% \usepackage[final]{neurips_2019}
+    %  \usepackage[final]{neurips_2019}
 
 % to avoid loading the natbib package, add option nonatbib:
-% \usepackage[nonatbib]{neurips_2019}
-%%%%%%%%%%%%%%%%%%%%%%
+%     \usepackage[nonatbib]{neurips_2019}
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
 
 \input{preamble}
 
-\title{MIM: Mutual Information Machine}
+\title{High Mutual Information in Representation Learning with Symmetric Variational Inference}
 
 %%%%%%%%%%%%%%%%%%%%%%
 % NeuRIPS formatting
 %%%%%%%%%%%%%%%%%%%%%%
-\author{Micha Livne
-\And Kevin Swersky
-\And David J.\ Fleet
+\author{%
+  Micha Livne \\
+  Department of Computer Science\\
+  University of Toronto\\
+  Vector Institute \\
+  \texttt{mlivne@cs.toronto.edu} \\
+   \And
+   Kevin Swersky \\
+   Google Brain \\
+   \texttt{kswersky@google.com} \\
+   \And
+   David J.\ Fleet \\
+  University of Toronto\\
+  Vector Institute \\
+   \texttt{fleet@cs.toronto.edu} \\
 }
-\date{May 2019}
+
+
+\date{September 2019}
 %%%%%%%%%%%%%%%%%%%%%%
 
 
-%%%%%%%%%%%%%%%%%%%%%%
-% ICLR formatting
-%%%%%%%%%%%%%%%%%%%%%%
-% \author{Micha Livne
-% \And Kevin Swersky
-% \And David J.\ Fleet
-% }
-%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{document}
 
 \maketitle
 
-\input{sections/abstract}
 \input{sections/introduction}
-\input{sections/variational_autoencoders}
-\input{sections/symmetry_and_mi}
-\input{sections/mutual_information_machine}
-\input{sections/learning}
-\input{sections/posterior-collapse}
 \input{sections/experiments}
-\input{sections/conclusions}
 
-\bibliography{paper}
 \bibliographystyle{plainnat}
-
-\newpage
-\appendix
-\input{sections/supplementary-material}
+\bibliography{paper}
 
 \end{document}
