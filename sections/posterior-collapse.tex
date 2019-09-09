@@ -1,0 +1,87 @@
+\section{Relation to VAE and Posterior Collapse}
+\label{sec:posterior-collapse}
+
+Here, before turning to empirical results, it is useful to briefly revisit 
+similarities and differences between MIM and the canonical VAE formulation. 
+To that end, one can show from Equations \eqref{eq:vi-objective}
+and \eqref{eq:vae-kl} that the VAE loss can be expressed in a form
+that bears similarity to the MIM loss in Equation \eqref{eq:mimloss}.
+In particular, following the derivation in the supplementary material,
+\begin{equation}
+\begin{aligned}
+\VAEloss ~=~
+\frac{1}{2} & \Big( \, H(\Msamp^\mathrm{VAE}, \,\Menc(\z|\x)\,\pjoint(\x))
++ H(\Msamp^\mathrm{VAE},\, \Mdec(\x|\z)\,\pjoint(\z)) \, \Big) 
+\\
+& ~~ - H_{\Msamp^\mathrm{VAE}}(\x) - H_{\Msamp^\mathrm{VAE}}(\z) + I_{\Msamp^\mathrm{VAE}}(\x;\z)  ~.
+\label{eq:vi-as-ml-objective-text}
+\end{aligned}
+\end{equation}
+where $\Msamp^\mathrm{VAE}(\x,\z) ~=~ \Menc(\z|\x)\, \pjoint (\x)$.
+Like the MIM loss, the first term in Equation \eqref{eq:vi-as-ml-objective-text}
+in the average of two cross entropy terms, between a sample distribution 
+and the encoding and decoding distributions. Unlike the MIM loss, these 
+terms are asymmetric as the samples are drawn only from the encoding 
+distribution. Also unlike the MIM loss, the VAE loss includes the 
+last three terms in Equation \eqref{eq:vi-as-ml-objective-text}, 
+which the sum of which comprise the negative joint entropy $-H(\z,\x)$ 
+under the sample distribution $\Msamp^\mathrm{VAE}$.
+
+While the MIM objective explicitly encourages high mutual information 
+between observations and corresponding latent embedings, this VAE loss 
+includes a term that encourages a reduction in the mutual information. 
+We posit that this plays a significant role in the phenomena often 
+referred to as posterior collapse, in which the variance of the variational 
+posterior grows large and the latent embedding conveys relatively little 
+information about the observations  (e.g., see \citep{ChenKSDDSSA16} 
+and others).  
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \david{old version}
+% Here we discuss a possible root cause for the observed phenomena 
+% of posterior collapse, and show that VAE learning can be viewed 
+% as an asymmetric MIM learning with a regularizer that encourages 
+% the appearance of the collapse. We further support that idea in 
+% the experiments in Section\ \ref{sec:posterior-collapse-mim-vae}.
+% As discussed earlier, VAE learning entails maximization of a variational lower
+% bound (ELBO) on the log-marginal likelihood, or equivalently, minimization of
+% Equaiton\ \eqref{eq:vae-kl}.
+% To connect the loss in Equation\ \eqref{eq:vae-kl} to MIM, we manipulate it to the following form
+% \begin{align}
+% & \frac{1}{2} \big(\, H(\Msamp^\mathrm{VAE},\, \Mdec(\x|\z)\,\pjoint(\z))
+% + H(\Msamp^\mathrm{VAE}, \,\Menc(\z|\x)\,\pjoint(\x))\, \big) + \nonumber \\
+% & - H_{\Msamp^\mathrm{VAE}}(\x) - H_{\Msamp^\mathrm{VAE}}(\z) + I_{\Msamp^\mathrm{VAE}}(\x;\z)  ~.
+% \label{eq:vi-as-ml-objective-text}
+% \end{align}
+% where $\pjoint(\x)$ is the data distribution, which is assumed to be independent of model
+% parameters $\theta$ and to exist almost everywhere (i.e., complementing $\pjoint(\z)$),
+% and $\Msamp^\mathrm{VAE}(\x,\z) ~=~ \pjoint (\x)\,\Menc(\z|\x)$.
+% Importantly, because $\pjoint(\x)$ does not depend on $\params$, the gradients of
+% Eqs.\ \eqref{eq:vi-as-ml-objective-text} and \eqref{eq:vae-kl}
+% are identical up to a multiple of $\frac{1}{2}$ and an additive constant, so they share the same stationary points.
+% We refer the reader to the supplementary material for detailed derivation.
+% We note that $\Msamp^\mathrm{VAE}$ comprises the encoding distribution in $\Msamp$.
+% The sum of the last three terms in Equation\ \eqref{eq:vi-as-ml-objective-text}
+% is the negative joint entropy $-H(\z, \x)$ under the sample distribution $\Msamp^\mathrm{VAE}$.
+% , i.e., $-H_{\Msamp^\mathrm{VAE}}(\z|\x )$.
+%
+% Equations\ \eqref{eq:vae-kl} and \eqref{eq:vi-as-ml-objective-text}, the VAE objective and 
+% VAE as regularized cross entropy objective respectively, define
+% equivalent optimization problems, under the assumption that  $\pjoint(\x)$ and
+% samples $\x \sim \pjoint(\x)$ do not depend on the parameters $\params$, and that
+% the optimization is gradient-based.
+% Equation \eqref{eq:vi-as-ml-objective-text} is the average of two cross-entropy objectives (
+% \ie, between sample distribution $\Msamp^\mathrm{VAE}$ and the model decoding and encoding distributions,
+% respectively), along with a joint entropy term (\ie, last three terms), which can be viewed as a
+% regularizer that encourages a reduction in mutual information and increased entropy in $\z$ and $\x$.
+% We note that Equation \eqref{eq:vi-as-ml-objective-text} is similar to the \MIM objective in Equation \eqref{eq:mimloss},
+% but with a different sample distribution, where the priors are defined to be the anchors, and with an additional regularizers.
+% In other words, Equation\ \eqref{eq:vi-as-ml-objective-text} suggests that VAE learning
+% implicitly encourages lower mutual information, which can manifest itself in collapsing some of the dimensions
+% of the posterior to hold little or no information (\ie, match the prior), and poor reconstruciton (\eg, blurry images).
+% This runs contrary to the goal of learning useful latent representations, and we
+% posit that it is an underlying root cause for {\em posterior collapse}, 
+% \david{not sure this is the definition we want.} 
+% wherein the encoder matches the prior and thus provides weak information about the latent state
+% % , so the decoder effectively becomes trained to match the prior
+% (e.g., see \citep{ChenKSDDSSA16} and others).

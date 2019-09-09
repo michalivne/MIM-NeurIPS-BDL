@@ -1,0 +1,80 @@
+%%%%%%%%%%%%%%%%%%%%%%
+% NeuRIPS formatting
+%%%%%%%%%%%%%%%%%%%%%%
+\PassOptionsToPackage{numbers}{natbib}
+%%%%%%%%%%%%%%%%%%%%%%
+\documentclass{article}
+
+%%%%%%%%%%%%%%%%%%%%%%
+% ICLR formatting
+%%%%%%%%%%%%%%%%%%%%%%
+% \usepackage{iclr2020_conference,times}
+%
+% Optional math commands from https://github.com/goodfeli/dlbook_notation.
+% \input{math_commands.tex}
+%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%
+% NeuRIPS formatting
+%%%%%%%%%%%%%%%%%%%%%%
+% if you need to pass options to natbib, use, e.g.:
+\PassOptionsToPackage{numbers, compress}{natbib}
+% before loading neurips_2019
+
+
+% to compile a preprint version, e.g., for submission to arXiv, add the [preprint] option:
+\usepackage[preprint]{neurips_2019}
+
+% to compile a camera-ready version, add the [final] option, e.g.:
+% \usepackage[final]{neurips_2019}
+
+% to avoid loading the natbib package, add option nonatbib:
+% \usepackage[nonatbib]{neurips_2019}
+%%%%%%%%%%%%%%%%%%%%%%
+
+\input{preamble}
+
+\title{MIM: Mutual Information Machine}
+
+%%%%%%%%%%%%%%%%%%%%%%
+% NeuRIPS formatting
+%%%%%%%%%%%%%%%%%%%%%%
+\author{Micha Livne
+\And Kevin Swersky
+\And David J.\ Fleet
+}
+\date{May 2019}
+%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%
+% ICLR formatting
+%%%%%%%%%%%%%%%%%%%%%%
+% \author{Micha Livne
+% \And Kevin Swersky
+% \And David J.\ Fleet
+% }
+%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\maketitle
+
+\input{sections/abstract}
+\input{sections/introduction}
+\input{sections/variational_autoencoders}
+\input{sections/symmetry_and_mi}
+\input{sections/mutual_information_machine}
+\input{sections/learning}
+\input{sections/posterior-collapse}
+\input{sections/experiments}
+\input{sections/conclusions}
+
+\bibliography{paper}
+\bibliographystyle{plainnat}
+
+\newpage
+\appendix
+\input{sections/supplementary-material}
+
+\end{document}

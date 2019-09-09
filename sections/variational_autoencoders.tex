@@ -1,0 +1,61 @@
+
+\section{Variational Autoencoders}
+\label{sec:vae}
+
+VAE learning entails optimization of a variational lower bound on the log-marginal likelihood
+of the data, $\log \pjoint(\x)$, to estimate the parameters of an approximate posterior
+$\Menc(\z|\x)$ over latent states $\z$ (\ie, the encoder), and the parameters
+of a corresponding decoder, $\Mdec(\x|\z)$  \citep{Kingma2013,Rezende2014}.
+A prior over the latent space, $\pjoint(\z)$, often assumed to be an isotropic
+Gaussian, serves as a prior for $\Menc(\z|\x)$ in the evidence-lower-bound (ELBO)
+on the marginal likelihood:
+\begin{eqnarray*}
+    \log \pjoint (\x) ~\ge~ 
+    \E{\z \sim \Menc(\z|\x)}{\,\log \Mdec(\x|\z)\,} - \DKL{\Menc(\z|\x)}{\pjoint(\z)} ~ ,
+\end{eqnarray*}
+where $\theta$ denotes the auto-encoder parameters. Here, we use $\pjoint(\x)$
+and $\pjoint(\z)$ to emphasize that these priors are given and fixed, and that we can 
+draw random samples from them.
+% and assumed to be the desired distributions we would like to model.  
+In what follows we often refer to them as \textit{anchors}
+to further emphasize their role.
+
+With amortized posterior inference, we take expectation over the observation
+distribution, $\pjoint (\x)$, to obtain the VAE objective:
+\begin{eqnarray}
+\VAEelbo \left( \params \right) &=& \E{\x \sim \pjoint (\x)}{\, \E{\z \sim \Menc(\z|\x)}{\,\log \Mdec(\x|\z)\,} - \DKL{\Menc(\z|\x)}{\pjoint(\z)} \,} \nonumber \\
+&=& \E{\x \sim \pjoint (\x),\z \sim \Menc(\z|\x)}
+{ \, \log \Mdec(\x|\z) + \log \pjoint(\z) - \log \Menc(\z|\x) \,}  ~,
+ \label{eq:vi-objective}
+\end{eqnarray}
+Gradients of Equation\ \eqref{eq:vi-objective} are estimated through MC sampling
+from $\Menc(\z|\x)$ with reparameterization, yielding unbiased low-variance
+gradient estimates \citep{Kingma2013,Rezende2014}.
+
+VAEs are normally thought of as maximizing a lower bound on the data log-likelihood,
+however it can also be expressed as minimizing the divergence between two joint
+distributions over $\x$ and $\z$.
+To see this, we first subtract $\log\pjoint(\x)$ from \eqref{eq:vi-objective},
+which does not change the gradients of the objective with respect to $\theta$.
+We then negate the result, as we will be performing minimization.
+This yields
+% This allows us to express the objective in terms of KL divergence; i.e.,
+% \begin{eqnarray}
+% % \DKL{ \Menc(\z | \x)\pjoint(\x)}{ \Mdec(\x | \z) \pjoint(\z) } = \hspace*{5.0cm} \nonumber \\
+% % \hspace*{3.0cm}
+% & \ & - ~\E{\x \sim \pjoint (\x),\z \sim \Menc(\z|\x)}
+% { \, \log \Mdec(\x|\z) + \log\pjoint(\z) - \log \pjoint(\x) - \log \Menc(\z|\x) \,}
+% \hspace*{1.0cm} \nonumber \\
+% &\ & \hspace*{2.0cm}  =~ \DKL{ \Menc(\z | \x)\pjoint(\x)}{ \Mdec(\x | \z) \pjoint(\z) }
+% \label{eq:vae-kl}
+% \end{eqnarray}
+% \david{or perhaps this is simpler:}
+\begin{eqnarray}
+\VAEloss \left( \params \right) &=& -\VAEelbo \left( \params \right) +
+\E{\x \sim \pjoint (\x)}{ \,  \log \pjoint(\x)  \,}  \nonumber \\
+&=& \DKL{ \Menc(\z | \x)\pjoint(\x)}{ \Mdec(\x | \z) \pjoint(\z) } ~.
+\label{eq:vae-kl}
+\end{eqnarray}
+The VAE optimization is therefore equivalent to minimizing the KL divergence
+between an encoding distribution $\Menc(\z | \x)\pjoint(\x)$ and a decoding
+distribution $\Mdec(\x | \z) \pjoint(\z)$.
