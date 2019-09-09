@@ -1,0 +1,15 @@
+\begin{tikzpicture}
+
+% Define nodes
+\node[latent]                            (z) {$\z$};
+\node[latent, below=of z, xshift=1.0cm]  (k) {$\k$};
+\node[obs, below=of z, xshift=-1.0cm]    (t) {$\t$};
+
+% Connect the nodes
+\edge {t,k} {z} ; %
+\edge {t} {k} ; %
+
+% Plates
+\plate {K} {(t)(k)} {$\Knum$} ;
+
+\end{tikzpicture}
