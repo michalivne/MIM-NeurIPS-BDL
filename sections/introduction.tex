@@ -1,11 +1,13 @@
 \section{Introduction}
 \label{sec:introduction}
 
-The variational auto-encoder is a successful class of hierarchical Bayesian models based on transforming data from a simple latent prior into a complicated observation distribution using a neural network.
+The variational auto-encoder (VAE) is a successful class of hierarchical Bayesian models based on transforming data from a simple latent prior into a complicated observation distribution using a neural network.
 
 \begin{align*}
     P(\x) &= \int_\x \Pdec \dz
 \end{align*}
+
+This likelihood is in general intractable to compute, there VAEs maximize the so-called evidence lower bound (ELBO)
 
 % Mutual information is a natural indicator of the quality of a learned representation
 % \cite{hjelm2018learning}, along with other characteristics, such as the compositionality of
